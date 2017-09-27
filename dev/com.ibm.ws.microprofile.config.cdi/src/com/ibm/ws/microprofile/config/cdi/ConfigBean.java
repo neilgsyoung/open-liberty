@@ -19,7 +19,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.PassivationCapable;
 
 import org.eclipse.microprofile.config.Config;
-import org.eclipse.microprofile.config.spi.ConfigBuilder;
+import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.spi.ConfigProviderResolver;
 
 /**
@@ -38,13 +38,7 @@ public class ConfigBean extends AbstractConfigBean<Config> implements Bean<Confi
     /** {@inheritDoc} */
     @Override
     public Config create(CreationalContext<Config> creationalContext) {
-        ConfigBuilder builder = ConfigProviderResolver.instance().getBuilder();
-        builder.addDiscoveredConverters();
-        builder.addDefaultSources();
-        builder.addDiscoveredSources();
-        Config config = builder.build();
-
-        return config;
+        return ConfigProvider.getConfig();
     }
 
     /** {@inheritDoc} */

@@ -38,9 +38,6 @@ public class ConfigBean extends AbstractConfigBean<Config> implements Bean<Confi
     /** {@inheritDoc} */
     @Override
     public Config create(CreationalContext<Config> creationalContext) {
-        // Although this is a request scoped bean, this config instance will be cached per classloader, so you don't really get a new config object per request
-        // However, the config object is updated with new values dynamically, so the user shouldn't notice any difference.
-        // This also means that injecting config gives the same result as calling getConfig() in user code
         return ConfigProvider.getConfig();
     }
 

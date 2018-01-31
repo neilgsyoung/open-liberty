@@ -11,14 +11,19 @@
 
 package com.ibm.ws.microprofile.config12.impl;
 
+import com.ibm.websphere.ras.Tr;
+import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.microprofile.config.converters.AutomaticConverter;
 import com.ibm.ws.microprofile.config.converters.PriorityConverterMap;
 import com.ibm.ws.microprofile.config.impl.ConversionManager;
 import com.ibm.ws.microprofile.config.impl.ConversionStatus;
+import com.ibm.ws.microprofile.config.interfaces.ConfigException;
 import com.ibm.ws.microprofile.config.interfaces.ConverterNotFoundException;
 
 public class Config12ConversionManager extends ConversionManager {
+
+    private static final TraceComponent tc = Tr.register(Config12ConversionManager.class);
 
     /**
      * @param converters all the converters to use
@@ -45,6 +50,16 @@ public class Config12ConversionManager extends ConversionManager {
             status.setConverted(converted);
         } catch (ConverterNotFoundException e) {
             //no FFDC
+            //this means that a suitable string constuctor method could not be found for the given class
+            //ignore the exception but don't set the conversion status
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "simpleConversion: An automatic converter for type '{0}' and raw String '{1}' threw an exception: {2}.", type, rawString, e);
+            }
+        } catch (Throwable t) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "simpleConversion: An automatic converter for type '{0}' and raw String '{1}' threw an exception: {2}.", type, rawString, t);
+            }
+            throw new ConfigException(t);
         }
 
         return status;

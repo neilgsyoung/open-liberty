@@ -31,7 +31,6 @@ import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.microprofile.config.impl.ConversionManager;
 import com.ibm.ws.microprofile.config.impl.SortedSources;
-import com.ibm.ws.microprofile.config.interfaces.ConfigException;
 import com.ibm.ws.microprofile.config.interfaces.SourcedPropertyValue;
 
 public class CompositeConfig implements Closeable, ConfigListener {
@@ -76,12 +75,11 @@ public class CompositeConfig implements Closeable, ConfigListener {
     }
 
     /**
-     * Add a config
      *
      * @param source
      * @param executor
+     * @param refreshInterval
      * @return
-     * @throws ConfigException
      */
     private PollingDynamicConfig addConfig(ConfigSource source, ScheduledExecutorService executor, long refreshInterval) {
         //we wrap each source up as an archaius config

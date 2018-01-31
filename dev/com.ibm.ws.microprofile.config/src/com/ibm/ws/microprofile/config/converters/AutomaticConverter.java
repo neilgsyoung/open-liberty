@@ -68,8 +68,6 @@ public class AutomaticConverter extends BuiltInConverter {
         Constructor<M> ctor = null;
         try {
             ctor = reflectionClass.getConstructor(String.class);
-        } catch (SecurityException e) {
-            throw new ConversionException(e);
         } catch (NoSuchMethodException e) {
             //No FFDC
         }
@@ -86,8 +84,6 @@ public class AutomaticConverter extends BuiltInConverter {
             } else if (method.getReturnType() == Void.TYPE) {
                 method = null;
             }
-        } catch (SecurityException e) {
-            throw new ConversionException(e);
         } catch (NoSuchMethodException e) {
             //No FFDC
         }
@@ -105,8 +101,6 @@ public class AutomaticConverter extends BuiltInConverter {
             } else if (method.getReturnType() == Void.TYPE) {
                 method = null;
             }
-        } catch (SecurityException e) {
-            throw new ConversionException(e);
         } catch (NoSuchMethodException e) {
             //No FFDC
         }
@@ -136,7 +130,14 @@ public class AutomaticConverter extends BuiltInConverter {
                         converted = this.parseMethod.invoke(null, value);
                     }
                 }
-            } catch (SecurityException | IllegalArgumentException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+            } catch (InvocationTargetException e) {
+                Throwable cause = e.getCause();
+                if (cause instanceof IllegalArgumentException) {
+                    throw (IllegalArgumentException) cause;
+                } else {
+                    throw new ConversionException(cause);
+                }
+            } catch (IllegalAccessException | InstantiationException e) {
                 throw new ConversionException(e);
             }
         }

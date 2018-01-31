@@ -20,7 +20,7 @@ package com.ibm.ws.microprofile.config.interfaces;
 /**
  * Thrown when a converter is not found for a specified type
  */
-public class ConverterNotFoundException extends ConfigException {
+public class ConverterNotFoundException extends IllegalArgumentException {
 
     private static final long serialVersionUID = 1L;
 

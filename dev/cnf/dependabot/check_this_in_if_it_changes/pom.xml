@@ -3569,7 +3569,7 @@
     <dependency>
       <groupId>net.jodah</groupId>
       <artifactId>failsafe</artifactId>
-      <version>1.0.4</version>
+      <version>2.4.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.aries.jmx</groupId>
